@@ -1,7 +1,8 @@
 {
   "timeZone": "GMT",
   "oauthScopes": [
-    "https://www.googleapis.com/auth/gmail.addons.execute"
+    "https://www.googleapis.com/auth/gmail.addons.execute",
+    "https://www.googleapis.com/auth/gmail.addons.current.message.readonly"
   ],
   "gmail": {
     "version": "TRUSTED_TESTER_V2",
