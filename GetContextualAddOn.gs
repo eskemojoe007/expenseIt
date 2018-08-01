@@ -1,3 +1,5 @@
+/* global  getReceivedDate, getLargestAmount, getExpenseDescription,
+  getSheetUrl, createExpensesCard*/
 /**
  * Copyright 2017 Google Inc.
  *
@@ -20,15 +22,15 @@
  * an 'onTriggerFunction' and is specified in the add-on's manifest.
  *
  * @param {Object} event Event containing the message ID and other context.
- * @returns {Card[]}
+ * @returns {Card[]} Returns the basic card
  */
 function getContextualAddOn(event) {
-  const message = getCurrentMessage(event);
-  const prefills = [getReceivedDate(message),
+  var message = getCurrentMessage(event);
+  var prefills = [getReceivedDate(message),
     getLargestAmount(message),
     getExpenseDescription(message),
     getSheetUrl()];
-  const card = createExpensesCard(prefills);
+  var card = createExpensesCard(prefills);
 
   return [card.build()];
 }
@@ -36,11 +38,11 @@ function getContextualAddOn(event) {
 /**
  * Retrieves the current message given an action event object.
  * @param {Event} event Action event object
- * @return {Message}
+ * @return {Message} Returns the message
  */
 function getCurrentMessage(event) {
-  const { accessToken } = event.messageMetadata;
-  const { messageId } = event.messageMetadata;
+  var accessToken = event.messageMetadata.accessToken;
+  var messageId = event.messageMetadata.messageId;
   GmailApp.setCurrentMessageAccessToken(accessToken);
   return GmailApp.getMessageById(messageId);
 }

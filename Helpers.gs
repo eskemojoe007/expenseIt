@@ -1,10 +1,10 @@
-function getReceivedDate() {
+function getReceivedDate(message) {
   return 'Todo';
 }
-function getLargestAmount() {
+function getLargestAmount(message) {
   return 'Todo';
 }
-function getExpenseDescription() {
+function getExpenseDescription(message) {
   return 'Todo';
 }
 function getSheetUrl() {
