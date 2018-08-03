@@ -82,6 +82,15 @@ function createExpensesCard(optPrefills, optStatus) {
   var card = CardService.newCardBuilder();
   card.setHeader(CardService.newCardHeader().setTitle('Log Your Expense'));
 
+  // Set up card clearer.
+  var clearLocal = CardService.newAction()
+    .setFunctionName('clearForm')
+    .setParameters({'Status': optStatus ? optStatus : ''});
+  var clearAction = CardService.newCardAction()
+    .setText('Clear form')
+    .setOnClickAction(clearLocal);
+  card.addCardAction(clearAction);
+
   // If we have a status add a section for the status
   if (optStatus) {
     // If the status is in the first slot of the array
@@ -106,4 +115,14 @@ function createExpensesCard(optPrefills, optStatus) {
   card.addSection(formSection);
 
   return card;
+}
+
+/**
+ * Recreates the main card without prefilled data.
+ *
+ * @param {Event} e An event object containing form inputs and parameters.
+ * @returns {Card}
+ */
+function clearForm(e) {
+  return createExpensesCard([null, null, null, getSheetUrl()], e.parameters.Status).build();
 }
