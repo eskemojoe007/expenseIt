@@ -1,4 +1,4 @@
-/* global CardService */
+/* global CardService PropertiesService getSheetUrl */
 var FIELDNAMES = ['Date', 'Amount', 'Description', 'Spreadsheet URL'];
 
 /**
@@ -27,7 +27,7 @@ function submitForm(e) {
     // Make sure all the fields are specified.
     FIELDNAMES.forEach(function (fieldName) {
       if (!res[fieldName]) {
-        throw 'Gotta fill out the whole form...dude!'
+        throw new Error('Gotta fill out the whole form...dude!');
       }
     });
     // Get the sheet reference by url, and activate
@@ -38,11 +38,15 @@ function submitForm(e) {
     // Add the form info, skip the URL
     sheet.appendRow(objToArray(res, FIELDNAMES.slice(0, FIELDNAMES.length - 1)));
 
+    // Set the properties
+    PropertiesService.getUserProperties().setProperties({'SPREADSHEET_URL': res['Spreadsheet URL']});
+
     // return card object.
-    return createExpensesCard(null, 'Logged expense successfully!').build();
+    return createExpensesCard([null, null, null, getSheetUrl()],
+      'Logged expense successfully!').build();
   } catch (err) {
     // On error...need to specify an error to the statusSection
-    if (err == 'Exception: Invalid argument: url') {
+    if (err === 'Exception: Invalid argument: url') {
       err = 'Invalid URL';
       res['Spreadsheet URL'] = null;
     }
