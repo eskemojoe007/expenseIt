@@ -1,6 +1,57 @@
 /* global CardService */
 var FIELDNAMES = ['Date', 'Amount', 'Description', 'Spreadsheet URL'];
 
+/**
+ * Returns an array corresponding to the given object and desired ordering of keys.
+ *
+ * @param {Object} obj Object whose values will be returned as an array.
+ * @param {String[]} keys An array of key names in the desired order.
+ * @returns {Object[]}
+ */
+function objToArray(obj, keys) {
+  return keys.map(function (key) {
+    return obj[key];
+  });
+}
+
+/**
+ * Logs form inputs into a spreadsheet given by URL from form.
+ * Then displays edit card.
+ *
+ * @param {Event} e An event object containing form inputs and parameters.
+ * @returns {Card} Card with the desired outputs
+ */
+function submitForm(e) {
+  var res = e.formInput;
+  try {
+    // Make sure all the fields are specified.
+    FIELDNAMES.forEach(function (fieldName) {
+      if (!res[fieldName]) {
+        throw 'Gotta fill out the whole form...dude!'
+      }
+    });
+    // Get the sheet reference by url, and activate
+    var sheet = SpreadsheetApp
+      .openByUrl((res['Spreadsheet URL']))
+      .getActiveSheet();
+
+    // Add the form info, skip the URL
+    sheet.appendRow(objToArray(res, FIELDNAMES.slice(0, FIELDNAMES.length - 1)));
+
+    // return card object.
+    return createExpensesCard(null, 'Logged expense successfully!').build();
+  } catch (err) {
+    // On error...need to specify an error to the statusSection
+    if (err == 'Exception: Invalid argument: url') {
+      err = 'Invalid URL';
+      res['Spreadsheet URL'] = null;
+    }
+    // return filled card but with error and existing values
+    return createExpensesCard(objToArray(res, FIELDNAMES), 'Error: ' + err).build();
+  }
+}
+
+
 function createFormSection(section, inputNames, optPrefills) {
   // Add a widget for each inputNames...fill if found with prefill
   for (var i = 0; i < inputNames.length; i++) {
@@ -12,6 +63,12 @@ function createFormSection(section, inputNames, optPrefills) {
     }
     section.addWidget(widget);
   }
+  var submitLocal = CardService.newAction().setFunctionName('submitForm');
+  var submitButton = CardService.newTextButton()
+    .setText('Submit')
+    .setOnClickAction(submitLocal);
+  section.addWidget(CardService.newButtonSet().addButton(submitButton));
+
   return section;
 }
 
