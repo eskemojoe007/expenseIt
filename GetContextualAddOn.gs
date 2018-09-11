@@ -1,5 +1,6 @@
 /* global  getReceivedDate, getLargestAmount, getExpenseDescription,
   getSheetUrl, createExpensesCard*/
+/* exported getContextualAddOn */
 /**
  * Copyright 2017 Google Inc.
  *

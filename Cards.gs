@@ -6,7 +6,7 @@ var FIELDNAMES = ['Date', 'Amount', 'Description', 'Spreadsheet URL'];
  *
  * @param {Object} obj Object whose values will be returned as an array.
  * @param {String[]} keys An array of key names in the desired order.
- * @returns {Object[]}
+ * @returns {Object[]} array from object
  */
 function objToArray(obj, keys) {
   return keys.map(function (key) {
@@ -121,7 +121,7 @@ function createExpensesCard(optPrefills, optStatus) {
  * Recreates the main card without prefilled data.
  *
  * @param {Event} e An event object containing form inputs and parameters.
- * @returns {Card}
+ * @returns {Card} returns empty card.
  */
 function clearForm(e) {
   return createExpensesCard([null, null, null, getSheetUrl()], e.parameters.Status).build();
